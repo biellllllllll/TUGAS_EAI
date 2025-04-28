@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Buku - Perpustakaan</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+    :root {
+      --primary: #7438e8;
+      --primary-light: #9466f0;
+      --secondary: #5ce1e6;
+      --dark: #252836;
+      --light: #eeedf0;
+      --success: #38e87c;
+      --warning: #e8d438;
+      --danger: #e83856;
+      --gray: #a0a3bd;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg, #121212, #2a2a3a);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--light);
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+      background: rgba(25, 25, 35, 0.9);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      padding: 20px 30px;
+      background: rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .header h1 {
+      font-size: 24px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+    }
+
+    .logo {
+      margin-right: 12px;
+      width: 40px;
+      height: 40px;
+      background: #2563a6;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(116, 56, 232, 0.7);
+      }
+      70% {
+        box-shadow: 0 0 0 10px rgba(116, 56, 232, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(116, 56, 232, 0);
+      }
+    }
+
+    .content {
+      padding: 30px;
+    }
+
+    .form-container {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 15px;
+      padding: 25px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--secondary);
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 12px 15px;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      font-family: "Poppins", sans-serif;
+      font-size: 15px;
+      color: var(--light);
+      transition: all 0.3s ease;
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(116, 56, 232, 0.3);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .input-field::placeholder {
+      color: var(--gray);
+    }
+
+    .button-group {
+      display: flex;
+      gap: 15px;
+      margin-top: 30px;
+    }
+
+    .button {
+      padding: 12px 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: var(--light);
+      font-family: "Poppins", sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex: 1;
+    }
+
+    .button:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(116, 56, 232, 0.3);
+    }
+
+    .button.secondary {
+      background: transparent;
+    }
+
+    .button.secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      box-shadow: none;
+    }
+
+    .button.primary {
+      background: #2563a6;
+      border-color: #2563a6;
+    }
+
+    .button.primary:hover {
+      background: #174a8c;
+      box-shadow: 0 5px 15px rgba(116, 56, 232, 0.4);
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        border-radius: 15px;
+      }
+
+      .header h1 {
+        font-size: 18px;
+      }
+
+      .logo {
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
+      }
+
+      .content {
+        padding: 20px;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>
+        <div class="logo"><i class="fas fa-book"></i></div>
+        Edit Buku
+      </h1>
+    </div>
+
+    <div class="content">
+      <div class="form-container">
+        <form id="update-book-form">
+          <div class="form-group">
+            <label for="book-title">Judul</label>
+            <input type="text" id="book-title" class="input-field" placeholder="Masukkan judul buku" required>
+          </div>
+          <div class="form-group">
+            <label for="book-author">Penulis</label>
+            <input type="text" id="book-author" class="input-field" placeholder="Masukkan nama penulis" required>
+          </div>
+          <div class="form-group">
+            <label for="book-category">Kategori</label>
+            <input type="text" id="book-category" class="input-field" placeholder="Masukkan kategori buku" required>
+          </div>
+          <div class="form-group">
+            <label for="book-year">Tahun</label>
+            <input type="number" id="book-year" class="input-field" placeholder="Masukkan tahun terbit" required>
+          </div>
+          <div class="button-group">
+            <button type="button" class="button secondary" onclick="window.location.href='view.html'">
+              <i class="fas fa-arrow-left"></i> Batal
+            </button>
+            <button type="submit" class="button primary">
+              <i class="fas fa-save"></i> Simpan Perubahan
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Get book ID from URL query string
+    const bookId = new URLSearchParams(window.location.search).get('id');
+
+    // Fetch book data based on ID when page loads
+    fetch(`http://localhost:5002/book/${bookId}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.error) {
+          // Create error notification
+          const notification = document.createElement('div');
+          notification.style.position = 'fixed';
+          notification.style.top = '20px';
+          notification.style.right = '20px';
+          notification.style.padding = '15px 20px';
+          notification.style.background = 'var(--danger)';
+          notification.style.color = 'white';
+          notification.style.borderRadius = '8px';
+          notification.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.2)';
+          notification.style.zIndex = '1000';
+          notification.innerHTML = `<i class="fas fa-exclamation-circle"></i> Buku tidak ditemukan`;
+          document.body.appendChild(notification);
+          
+          setTimeout(() => {
+            notification.style.opacity = '0';
+            notification.style.transition = 'opacity 0.5s ease';
+            setTimeout(() => {
+              document.body.removeChild(notification);
+              window.location.href = 'view.html';  // Redirect to book list if not found
+            }, 500);
+          }, 2000);
+        } else {
+          // Fill form with existing book data
+          document.getElementById('book-title').value = data.title;
+          document.getElementById('book-author').value = data.author;
+          document.getElementById('book-category').value = data.category;
+          document.getElementById('book-year').value = data.year;
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        
+        // Show error notification
+        const notification = document.createElement('div');
+        notification.style.position = 'fixed';
+        notification.style.top = '20px';
+        notification.style.right = '20px';
+        notification.style.padding = '15px 20px';
+        notification.style.background = 'var(--danger)';
+        notification.style.color = 'white';
+        notification.style.borderRadius = '8px';
+        notification.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.2)';
+        notification.style.zIndex = '1000';
+        notification.innerHTML = `<i class="fas fa-exclamation-circle"></i> Error: ${err}`;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+          notification.style.opacity = '0';
+          notification.style.transition = 'opacity 0.5s ease';
+          setTimeout(() => {
+            document.body.removeChild(notification);
+            window.location.href = 'view.html';
+          }, 500);
+        }, 2000);
+      });
+
+    // Handle form submission for updating book
+    document.getElementById('update-book-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const title = document.getElementById('book-title').value;
+      const author = document.getElementById('book-author').value;
+      const category = document.getElementById('book-category').value;
+      const year = document.getElementById('book-year').value;
+      
+      // Disable buttons and show loading state
+      const buttons = document.querySelectorAll('.button');
+      buttons.forEach(btn => {
+        btn.disabled = true;
+        btn.style.opacity = '0.7';
+      });
+      
+      document.querySelector('.button.primary').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
+
+      fetch(`http://localhost:5002/update_book/${bookId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, author, category, year })
+      })
+      .then(res => res.json())
+      .then(data => {
+        // Show success notification
+        const notification = document.createElement('div');
+        notification.style.position = 'fixed';
+        notification.style.top = '20px';
+        notification.style.right = '20px';
+        notification.style.padding = '15px 20px';
+        notification.style.background = 'var(--success)';
+        notification.style.color = 'white';
+        notification.style.borderRadius = '8px';
+        notification.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.2)';
+        notification.style.zIndex = '1000';
+        notification.innerHTML = `<i class="fas fa-check-circle"></i> Buku berhasil diupdate: ${data.title}`;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+          notification.style.opacity = '0';
+          notification.style.transition = 'opacity 0.5s ease';
+          setTimeout(() => {
+            document.body.removeChild(notification);
+            window.location.href = 'view.html'; // Return to book list after update
+          }, 500);
+        }, 2000);
+      })
+      .catch(err => {
+        console.error(err);
+        
+        // Show error notification
+        const notification = document.createElement('div');
+        notification.style.position = 'fixed';
+        notification.style.top = '20px';
+        notification.style.right = '20px';
+        notification.style.padding = '15px 20px';
+        notification.style.background = 'var(--danger)';
+        notification.style.color = 'white';
+        notification.style.borderRadius = '8px';
+        notification.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.2)';
+        notification.style.zIndex = '1000';
+        notification.innerHTML = `<i class="fas fa-exclamation-circle"></i> Error: ${err}`;
+        document.body.appendChild(notification);
+        
+        // Reset buttons
+        buttons.forEach(btn => {
+          btn.disabled = false;
+          btn.style.opacity = '1';
+        });
+        document.querySelector('.button.primary').innerHTML = '<i class="fas fa-save"></i> Simpan Perubahan';
+        
+        setTimeout(() => {
+          notification.style.opacity = '0';
+          notification.style.transition = 'opacity 0.5s ease';
+          setTimeout(() => {
+            document.body.removeChild(notification);
+          }, 500);
+        }, 2000);
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Beranda - E-Perpus</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+    body { margin: 0; font-family: 'Roboto', Arial, sans-serif; background: #f4f6fa; color: #222; }
+    .sidebar { position: fixed; left: 0; top: 0; bottom: 0; width: 220px; background: #2563a6; color: #fff; display: flex; flex-direction: column; z-index: 100; }
+    .sidebar .logo { display: flex; align-items: center; padding: 24px 20px 12px 20px; font-size: 20px; font-weight: 700; letter-spacing: 1px; border-bottom: 1px solid #1e4e7a; }
+    .sidebar .logo i { margin-right: 10px; font-size: 22px; }
+    .sidebar .profile { display: flex; align-items: center; padding: 18px 20px 12px 20px; border-bottom: 1px solid #1e4e7a; }
+    .sidebar .profile img { width: 38px; height: 38px; border-radius: 50%; margin-right: 12px; border: 2px solid #fff; }
+    .sidebar .profile .info { display: flex; flex-direction: column; }
+    .sidebar .profile .info .name { font-weight: 500; font-size: 15px; }
+    .sidebar .profile .info .role { font-size: 12px; color: #b3d1f7; }
+    .sidebar nav { flex: 1; padding: 18px 0; }
+    .sidebar nav a { display: flex; align-items: center; padding: 12px 28px; color: #fff; text-decoration: none; font-size: 15px; border-left: 4px solid transparent; transition: background 0.2s, border-color 0.2s; }
+    .sidebar nav a.active, .sidebar nav a:hover { background: #1e4e7a; border-left: 4px solid #5ce1e6; color: #5ce1e6; }
+    .sidebar nav a i { margin-right: 12px; font-size: 16px; }
+    .sidebar .footer { padding: 16px 20px; font-size: 12px; color: #b3d1f7; border-top: 1px solid #1e4e7a; text-align: center; }
+    .main { margin-left: 220px; min-height: 100vh; display: flex; flex-direction: column; }
+    .header { background: #2563a6; color: #fff; padding: 18px 32px 12px 32px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 6px rgba(30,60,120,0.04); }
+    .header .left { display: flex; flex-direction: column; }
+    .header .title { font-size: 20px; font-weight: 500; }
+    .header .date { font-size: 13px; color: #b3d1f7; margin-top: 2px; }
+    .header .user { display: flex; align-items: center; gap: 10px; }
+    .header .user i { font-size: 18px; }
+    .header .user .username { font-size: 15px; font-weight: 500; }
+    .content { flex: 1; padding: 32px 32px 0 32px; background: #f4f6fa; min-height: 600px; }
+    .card { background: #fff; border-radius: 18px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); padding: 32px 36px 28px 36px; width: 100%; max-width: 1100px; margin: 32px auto; color: #222; }
+    .card-title { display: flex; align-items: center; font-size: 2rem; font-weight: 700; margin-bottom: 18px; color: #2563a6; gap: 12px; }
+    .card-title .icon { background: #43a047; color: #fff; border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 28px; width: 90%; max-width: 900px; margin: 0 auto; }
+    .menu-card { background: #fff; border-radius: 18px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); display: flex; flex-direction: column; align-items: center; padding: 28px 12px 18px 12px; transition: transform 0.2s, box-shadow 0.2s; }
+    .menu-card:hover { transform: translateY(-5px); box-shadow: 0 8px 32px rgba(0,0,0,0.12); }
+    .menu-card .icon { font-size: 3.2rem; margin-bottom: 18px; color: #2563a6; }
+    .menu-card .label { font-size: 1.15rem; font-weight: 600; margin-bottom: 12px; text-align: center; color: #222; }
+    .menu-card .btn { background: #2563a6; color: #fff; border: none; border-radius: 8px; padding: 8px 18px; font-size: 1rem; font-weight: 500; cursor: pointer; margin-bottom: 10px; transition: background 0.2s; text-decoration: none; }
+    .menu-card .btn:hover { background: #1e4e7a; }
+    .menu-card .count { font-size: 0.98rem; color: #666; background: #f4f6fa; border-radius: 6px; padding: 4px 12px; margin-top: 6px; }
+    .footer-bar { background: #2563a6; color: #fff; text-align: center; padding: 10px 0; font-size: 13px; letter-spacing: 1px; margin-top: 32px; }
+    @media (max-width: 900px) {
+      .sidebar { width: 60px; }
+      .sidebar .logo, .sidebar .profile .info, .sidebar nav a span { display: none; }
+      .main { margin-left: 60px; }
+      .header, .content { padding-left: 16px; padding-right: 16px; }
+      .card-grid { grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
+    }
+    @media (max-width: 600px) {
+      .card-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="logo"><i class="fas fa-book"></i> <span>E - Perpus</span></div>
+    <div class="profile">
+      <img src="https://ui-avatars.com/api/?name=Admin&background=2563a6&color=fff" alt="Admin" />
+      <div class="info">
+        <span class="name">Administrator</span>
+        <span class="role">Akun Terverifikasi</span>
+      </div>
+    </div>
+    <nav>
+      <a href="/dashboard.html" class="active"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
+      <a href="/app_user/view.html"><i class="fas fa-users"></i> <span>Master Data</span></a>
+      <a href="/app_buku/view.html"><i class="fas fa-book"></i> <span>Katalog Buku</span></a>
+      <a href="/reports.html"><i class="fas fa-chart-bar"></i> <span>Laporan Perpustakaan</span></a>
+      <a href="#"><i class="fas fa-sign-out-alt"></i> <span>Keluar</span></a>
+    </nav>
+  </div>
+  <div class="main">
+    <div class="header">
+      <div class="left">
+        <span class="title">Dashboard</span>
+        <span class="date" id="today-date"></span>
+      </div>
+      <div class="user">
+        <i class="fas fa-user-circle"></i>
+        <span class="username">Administrator</span>
+      </div>
+    </div>
+    <div class="content">
+      <div class="card">
+        <div class="card-title">
+          <span class="icon"><i class="fas fa-tachometer-alt"></i></span>
+          Menu Utama
+        </div>
+        <div class="card-grid">
+          <div class="menu-card">
+            <div class="icon"><i class="fas fa-users"></i></div>
+            <div class="label">Master Data Anggota</div>
+            <a href="/app_user/view.html" class="btn">Lihat Data</a>
+            <div class="count">Jumlah Data : 0</div>
+          </div>
+          <div class="menu-card">
+            <div class="icon"><i class="fas fa-book"></i></div>
+            <div class="label">Katalog Buku</div>
+            <a href="/app_buku/view.html" class="btn">Lihat Data</a>
+            <div class="count">Jumlah Data : 0</div>
+          </div>
+          <div class="menu-card">
+            <div class="icon"><i class="fas fa-hand-holding"></i></div>
+            <div class="label">Data Peminjaman</div>
+            <a href="/app_peminjaman/view.html" class="btn">Lihat Data</a>
+            <div class="count">Jumlah Data : 0</div>
+          </div>
+          <div class="menu-card">
+            <div class="icon"><i class="fas fa-arrow-right"></i></div>
+            <div class="label">Data Pengembalian</div>
+            <a href="/app_pengembalian/view.html" class="btn">Lihat Data</a>
+            <div class="count">Jumlah Data : 0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Tanggal hari ini
+    const date = new Date();
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    document.getElementById('today-date').textContent = date.toLocaleDateString('id-ID', options);
+  </script>
+</body>
+</html>

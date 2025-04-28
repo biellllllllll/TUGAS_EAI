@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data Peminjaman - E-Perpus</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+    body { margin: 0; font-family: 'Roboto', Arial, sans-serif; background: #f4f6fa; color: #222; }
+    .main { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
+    .header { background: #2563a6; color: #fff; padding: 28px 0 18px 0; width: 100%; text-align: center; box-shadow: 0 2px 8px rgba(30,60,120,0.08); }
+    .header .title { font-size: 2.2rem; font-weight: 700; letter-spacing: 1px; }
+    .header .subtitle { font-size: 1.1rem; color: #b3d1f7; margin-top: 6px; }
+    .content { flex: 1; width: 100%; display: flex; flex-direction: column; align-items: center; padding: 36px 0 0 0; }
+    .card {
+      background: #fff;
+      border-radius: 22px;
+      box-shadow: 0 6px 32px rgba(30,99,166,0.10);
+      padding: 38px 40px 32px 40px;
+      width: 96%;
+      max-width: 1100px;
+      margin-bottom: 32px;
+      color: #222;
+      position: relative;
+      animation: fadeIn 0.7s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .card-title {
+      display: flex;
+      align-items: center;
+      font-size: 2.1rem;
+      font-weight: 700;
+      margin-bottom: 22px;
+      color: #2563a6;
+      gap: 16px;
+    }
+    .card-title .icon {
+      background: #5ce1e6;
+      color: #2563a6;
+      border-radius: 50%;
+      width: 54px;
+      height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      box-shadow: 0 2px 8px #5ce1e655;
+    }
+    .card-actions {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+    .btn {
+      background: #2563a6;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 28px;
+      font-size: 1.08rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 2px 8px #2563a633;
+    }
+    .btn.primary {
+      background: #5ce1e6;
+      color: #2563a6;
+    }
+    .btn:hover {
+      background: #1e4e7a;
+      color: #fff;
+    }
+    .btn.primary:hover {
+      background: #38e87c;
+      color: #2563a6;
+    }
+    .table-container {
+      overflow-x: auto;
+      margin-top: 10px;
+    }
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: #fff;
+      border-radius: 14px;
+      overflow: hidden;
+      color: #222;
+      font-size: 1rem;
+      margin-bottom: 0;
+      box-shadow: 0 2px 8px rgba(30,60,120,0.06);
+    }
+    thead tr {
+      background: #2563a6;
+      color: #fff;
+      font-weight: 600;
+    }
+    th, td {
+      padding: 15px 20px;
+      text-align: left;
+    }
+    tbody tr {
+      border-top: 1px solid #f4f6fa;
+      transition: background 0.2s;
+    }
+    tbody tr:hover {
+      background: #e3f2fd;
+    }
+    .table-actions {
+      display: flex;
+      gap: 10px;
+    }
+    .btn-action {
+      background: #fff;
+      color: #2563a6;
+      border: 1.5px solid #2563a6;
+      border-radius: 7px;
+      padding: 8px 18px;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      transition: background 0.2s, color 0.2s;
+      font-weight: 500;
+    }
+    .btn-action.edit {
+      border-color: #5ce1e6;
+      color: #2563a6;
+    }
+    .btn-action.delete {
+      border-color: #e83856;
+      color: #e83856;
+    }
+    .btn-action.edit:hover {
+      background: #5ce1e6;
+      color: #fff;
+    }
+    .btn-action.delete:hover {
+      background: #e83856;
+      color: #fff;
+    }
+    .footer-bar { background: #2563a6; color: #fff; text-align: center; padding: 12px 0; font-size: 14px; letter-spacing: 1px; margin-top: 32px; border-radius: 0 0 18px 18px; }
+    @media (max-width: 900px) { .card { padding: 18px 6px; } }
+    @media (max-width: 600px) { .card { width: 98%; padding: 8px 2px; } .header .title { font-size: 1.3rem; } }
+  </style>
+</head>
+<body>
+  <div class="main">
+    <div class="header">
+      <div class="title">Data Peminjaman</div>
+      <div class="subtitle">Kelola dan pantau seluruh transaksi peminjaman buku</div>
+    </div>
+    <div class="content">
+      <div class="card">
+        <div class="card-title">
+          <span class="icon"><i class="fas fa-hand-holding"></i></span>
+          Data Peminjaman
+        </div>
+        <div class="card-actions">
+          <a href="/dashboard.html" class="btn"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+          <a href="view_create.html" class="btn primary"><i class="fas fa-plus"></i> Tambah Peminjaman</a>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Judul</th>
+                <th>Penulis</th>
+                <th>Tahun</th>
+                <th>Kategori</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Belajar Python</td>
+                <td>Andi</td>
+                <td>2022</td>
+                <td>Pemrograman</td>
+                <td class="table-actions">
+                  <a href="view_update.html?id=1" class="btn-action edit"><i class="fas fa-edit"></i> Edit</a>
+                  <button class="btn-action delete"><i class="fas fa-trash"></i> Delete</button>
+                </td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Matematika Dasar</td>
+                <td>Sri</td>
+                <td>2021</td>
+                <td>Pendidikan</td>
+                <td class="table-actions">
+                  <a href="view_update.html?id=2" class="btn-action edit"><i class="fas fa-edit"></i> Edit</a>
+                  <button class="btn-action delete"><i class="fas fa-trash"></i> Delete</button>
+                </td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>Sejarah Dunia</td>
+                <td>Budi</td>
+                <td>2020</td>
+                <td>Sejarah</td>
+                <td class="table-actions">
+                  <a href="view_update.html?id=3" class="btn-action edit"><i class="fas fa-edit"></i> Edit</a>
+                  <button class="btn-action delete"><i class="fas fa-trash"></i> Delete</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

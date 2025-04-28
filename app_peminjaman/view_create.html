@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tambah Peminjaman - E-Perpus</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+    body { margin: 0; font-family: 'Roboto', Arial, sans-serif; background: #f4f6fa; color: #222; }
+    .main-container { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+    .card { background: #fff; border-radius: 18px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); padding: 32px 36px 28px 36px; width: 100%; max-width: 480px; margin: 32px auto; color: #222; }
+    .card-title { display: flex; align-items: center; font-size: 1.6rem; font-weight: 700; margin-bottom: 18px; color: #2563a6; gap: 12px; }
+    .card-title .icon { background: #2563a6; color: #fff; border-radius: 50%; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; margin-bottom: 7px; font-size: 1rem; font-weight: 500; color: #2563a6; }
+    .form-control { width: 100%; padding: 12px 15px; background: #f4f6fa; border: 1px solid #a0a3bd; border-radius: 8px; font-family: 'Roboto', Arial, sans-serif; font-size: 1rem; color: #222; transition: border 0.2s; }
+    .form-control:focus { outline: none; border-color: #2563a6; background: #fff; }
+    .form-actions { display: flex; gap: 12px; margin-top: 24px; justify-content: flex-start; }
+    .btn { padding: 10px 22px; border-radius: 8px; font-size: 1rem; font-weight: 500; cursor: pointer; border: none; transition: background 0.2s, color 0.2s; display: flex; align-items: center; gap: 8px; }
+    .btn.cancel { background: #e3eaff; color: #2563a6; border: 1px solid #a0a3bd; }
+    .btn.cancel:hover { background: #b3d1f7; }
+    .btn.primary { background: #2563a6; color: #fff; }
+    .btn.primary:hover { background: #174a8c; }
+    @media (max-width: 600px) { .card { padding: 16px 4px; } }
+    .form-control[type="date"] { padding-right: 40px; min-width: 0; box-sizing: border-box; }
+  </style>
+</head>
+<body>
+  <div class="main-container">
+    <div class="card">
+      <div class="card-title"><span class="icon"><i class="fas fa-plus"></i></span>Tambah Peminjaman</div>
+      <form>
+        <div class="form-group">
+          <label for="nama">Nama Peminjam</label>
+          <select id="nama" class="form-control">
+            <option>Pilih Peminjam</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="judul">Judul Buku</label>
+          <select id="judul" class="form-control">
+            <option>Pilih Buku</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="tgl_pinjam">Tanggal Pinjam</label>
+          <input type="date" id="tgl_pinjam" class="form-control"/>
+        </div>
+        <div class="form-group">
+          <label for="tgl_kembali">Tanggal Kembali</label>
+          <input type="date" id="tgl_kembali" class="form-control"/>
+        </div>
+        <div class="form-group">
+          <label for="status">Status</label>
+          <select id="status" class="form-control">
+            <option>Dipinjam</option>
+            <option>Kembali</option>
+          </select>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn cancel" onclick="window.history.back()"><i class="fas fa-arrow-left"></i> Kembali</button>
+          <button type="submit" class="btn primary"><i class="fas fa-lock"></i> Tambah Peminjaman</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Fetch users data
+    fetch('http://localhost:5001/users')
+      .then(response => response.json())
+      .then(data => {
+        const userSelect = document.getElementById('nama');
+        data.forEach(user => {
+          const option = document.createElement('option');
+          option.value = user.id;
+          option.textContent = user.nama;
+          userSelect.appendChild(option);
+        });
+      })
+      .catch(error => console.error('Error fetching users:', error));
+
+    // Fetch books data
+    fetch('http://localhost:5002/books')
+      .then(response => response.json())
+      .then(data => {
+        const bookSelect = document.getElementById('judul');
+        data.forEach(book => {
+          const option = document.createElement('option');
+          option.value = book.id;
+          option.textContent = book.judul;
+          bookSelect.appendChild(option);
+        });
+      })
+      .catch(error => console.error('Error fetching books:', error));
+
+    // Handle form submission
+    document.getElementById('create-loan-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const formData = {
+        user_id: document.getElementById('nama').value,
+        book_id: document.getElementById('judul').value,
+        tanggal_pinjam: document.getElementById('tgl_pinjam').value,
+        tanggal_kembali: document.getElementById('tgl_kembali').value,
+        status: document.getElementById('status').value
+      };
+
+      try {
+        const response = await fetch('http://localhost:5003/loans', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        });
+
+        if (response.ok) {
+          alert('Peminjaman berhasil ditambahkan!');
+          window.location.href = '/loans';
+        } else {
+          alert('Gagal menambahkan peminjaman');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Terjadi kesalahan saat menambahkan peminjaman');
+      }
+    });
+  </script>
+</body>
+</html>

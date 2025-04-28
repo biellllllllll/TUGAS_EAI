@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Katalog Buku - E-Perpus</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+    body { margin: 0; font-family: 'Roboto', Arial, sans-serif; background: #f4f6fa; color: #222; }
+    .sidebar { position: fixed; left: 0; top: 0; bottom: 0; width: 220px; background: #2563a6; color: #fff; display: flex; flex-direction: column; z-index: 100; }
+    .sidebar .logo { display: flex; align-items: center; padding: 24px 20px 12px 20px; font-size: 20px; font-weight: 700; letter-spacing: 1px; border-bottom: 1px solid #1e4e7a; }
+    .sidebar .logo i { margin-right: 10px; font-size: 22px; }
+    .sidebar .profile { display: flex; align-items: center; padding: 18px 20px 12px 20px; border-bottom: 1px solid #1e4e7a; }
+    .sidebar .profile img { width: 38px; height: 38px; border-radius: 50%; margin-right: 12px; border: 2px solid #fff; }
+    .sidebar .profile .info { display: flex; flex-direction: column; }
+    .sidebar .profile .info .name { font-weight: 500; font-size: 15px; }
+    .sidebar .profile .info .role { font-size: 12px; color: #b3d1f7; }
+    .sidebar nav { flex: 1; padding: 18px 0; }
+    .sidebar nav a { display: flex; align-items: center; padding: 12px 28px; color: #fff; text-decoration: none; font-size: 15px; border-left: 4px solid transparent; transition: background 0.2s, border-color 0.2s; }
+    .sidebar nav a.active, .sidebar nav a:hover { background: #1e4e7a; border-left: 4px solid #5ce1e6; color: #5ce1e6; }
+    .sidebar nav a i { margin-right: 12px; font-size: 16px; }
+    .sidebar .footer { padding: 16px 20px; font-size: 12px; color: #b3d1f7; border-top: 1px solid #1e4e7a; text-align: center; }
+    .main { margin-left: 220px; min-height: 100vh; display: flex; flex-direction: column; }
+    .header { background: #2563a6; color: #fff; padding: 18px 32px 12px 32px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 6px rgba(30,60,120,0.04); }
+    .header .left { display: flex; flex-direction: column; }
+    .header .title { font-size: 20px; font-weight: 500; }
+    .header .date { font-size: 13px; color: #b3d1f7; margin-top: 2px; }
+    .header .user { display: flex; align-items: center; gap: 10px; }
+    .header .user i { font-size: 18px; }
+    .header .user .username { font-size: 15px; font-weight: 500; }
+    .content { flex: 1; padding: 32px 32px 0 32px; background: #f4f6fa; min-height: 600px; }
+    .card { background: #fff; border-radius: 18px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); padding: 32px 36px 28px 36px; width: 100%; max-width: 1100px; margin: 32px auto; color: #222; }
+    .card-title { display: flex; align-items: center; font-size: 2rem; font-weight: 700; margin-bottom: 18px; color: #2563a6; gap: 12px; }
+    .card-title .icon { background: #43a047; color: #fff; border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+    .card-actions { display: flex; gap: 12px; margin-bottom: 18px; }
+    .btn { background: #fff; color: #2563a6; border: 1px solid #2563a6; border-radius: 8px; padding: 10px 22px; font-size: 1rem; font-weight: 500; cursor: pointer; transition: background 0.2s, color 0.2s; display: flex; align-items: center; gap: 8px; }
+    .btn.primary { background: #2563a6; color: #fff; border: none; }
+    .btn:hover { background: #5ce1e6; color: #2563a6; }
+    .table-container { overflow-x: auto; margin-top: 10px; }
+    table { width: 100%; border-collapse: separate; border-spacing: 0; background: #fff; border-radius: 12px; overflow: hidden; color: #222; font-size: 1rem; margin-bottom: 0; box-shadow: 0 2px 8px rgba(30,60,120,0.06); }
+    thead tr { background: #2563a6; color: #fff; font-weight: 600; }
+    th, td { padding: 14px 18px; text-align: left; }
+    tbody tr { border-top: 1px solid #f4f6fa; transition: background 0.2s; }
+    tbody tr:hover { background: #e3f2fd; }
+    .table-actions { display: flex; gap: 8px; }
+    .btn-action { background: #fff; color: #2563a6; border: 1px solid #2563a6; border-radius: 6px; padding: 7px 16px; font-size: 0.98rem; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background 0.2s, color 0.2s; }
+    .btn-action.edit { border-color: #5ce1e6; color: #2563a6; }
+    .btn-action.delete { border-color: #e83856; color: #e83856; }
+    .btn-action.edit:hover { background: #5ce1e6; color: #fff; }
+    .btn-action.delete:hover { background: #e83856; color: #fff; }
+    .footer-bar { background: #2563a6; color: #fff; text-align: center; padding: 10px 0; font-size: 13px; letter-spacing: 1px; margin-top: 32px; }
+    @media (max-width: 900px) { .sidebar { width: 60px; } .sidebar .logo, .sidebar .profile .info, .sidebar nav a span { display: none; } .main { margin-left: 60px; } .header, .content { padding-left: 16px; padding-right: 16px; } .card { padding: 18px 6px; } }
+    @media (max-width: 600px) { .card { width: 98%; padding: 8px 2px; } }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="logo"><i class="fas fa-book"></i> <span>E - Perpus</span></div>
+    <div class="profile">
+      <img src="https://ui-avatars.com/api/?name=Admin&background=2563a6&color=fff" alt="Admin" />
+      <div class="info">
+        <span class="name">Administrator</span>
+        <span class="role">Akun Terverifikasi</span>
+      </div>
+    </div>
+    <nav>
+      <a href="/dashboard.html"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
+      <a href="/app_user/view.html"><i class="fas fa-users"></i> <span>Master Data</span></a>
+      <a href="/app_buku/view.html" class="active"><i class="fas fa-book"></i> <span>Katalog Buku</span></a>
+      <a href="/reports.html"><i class="fas fa-chart-bar"></i> <span>Laporan Perpustakaan</span></a>
+      <a href="#"><i class="fas fa-info-circle"></i> <span>Identitas Aplikasi</span></a>
+      <a href="#"><i class="fas fa-envelope"></i> <span>Pesan</span></a>
+      <a href="#"><i class="fas fa-sign-out-alt"></i> <span>Keluar</span></a>
+    </nav>
+    <div class="footer">Hak Cipta &copy; 2025 E-Perpus</div>
+  </div>
+  <div class="main">
+    <div class="header">
+      <div class="left">
+        <span class="title">Katalog Buku</span>
+        <span class="date" id="today-date"></span>
+      </div>
+      <div class="user">
+        <i class="fas fa-user-circle"></i>
+        <span class="username">Administrator</span>
+      </div>
+    </div>
+    <div class="content">
+      <div class="card">
+        <div class="card-title">
+          <span class="icon"><i class="fas fa-book"></i></span>
+          Data Buku
+        </div>
+        <div class="card-actions">
+          <a href="/dashboard.html" class="btn"><i class="fas fa-arrow-left"></i> Kembali</a>
+          <a href="view_create.html" class="btn primary"><i class="fas fa-plus"></i> Tambah Buku</a>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Judul</th>
+                <th>Penulis</th>
+                <th>Penerbit</th>
+                <th>Tahun</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Matematika Dasar</td>
+                <td>Drs. Sumarno</td>
+                <td>Erlangga</td>
+                <td>2022</td>
+                <td><span style="color:#38e87c;font-weight:600;">Tersedia</span></td>
+                <td class="table-actions">
+                  <a href="view_update.html?id=1" class="btn-action edit"><i class="fas fa-edit"></i> Edit</a>
+                  <button class="btn-action delete"><i class="fas fa-trash"></i> Delete</button>
+                </td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Fisika SMA</td>
+                <td>Dr. Andi</td>
+                <td>Gramedia</td>
+                <td>2021</td>
+                <td><span style="color:#e83856;font-weight:600;">Dipinjam</span></td>
+                <td class="table-actions">
+                  <a href="view_update.html?id=2" class="btn-action edit"><i class="fas fa-edit"></i> Edit</a>
+                  <button class="btn-action delete"><i class="fas fa-trash"></i> Delete</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bar">Hak Cipta &copy; 2025 E-Perpus. Versi 1.0.0</div>
+  </div>
+  <script>
+    // Tanggal hari ini
+    const date = new Date();
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    document.getElementById('today-date').textContent = date.toLocaleDateString('id-ID', options);
+  </script>
+</body>
+</html>
